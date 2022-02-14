@@ -377,6 +377,7 @@ public final class MetricsAdvisorAsyncClient {
 //        } catch (RuntimeException ex) {
 //            return new PagedFlux<>(() -> FluxUtil.monoError(logger, ex));
 //        }
+        
     }
 
     /**
