@@ -53,6 +53,8 @@
       <modules>
         <module>azure-ai-metricsadvisor</module>
         <module>azure-ai-metricsadvisor-perf</module>
+        <module>azure-ai-metricsadvisor-llc</module>
+        <module>azure-ai-metricsadvisor-generated</module>
       </modules>
     </profile>
   </profiles>
