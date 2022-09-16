@@ -250,8 +250,54 @@ public interface RedisClient
      *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Mono<Response<RedisResourceInner>> updateWithResponseAsync(
+    Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
         String resourceGroupName, String name, RedisUpdateParameters parameters);
+
+    /**
+     * Update an existing Redis cache.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @param parameters Parameters supplied to the Update Redis operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of a single Redis item in List or Get Operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    PollerFlux<PollResult<RedisResourceInner>, RedisResourceInner> beginUpdateAsync(
+        String resourceGroupName, String name, RedisUpdateParameters parameters);
+
+    /**
+     * Update an existing Redis cache.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @param parameters Parameters supplied to the Update Redis operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of a single Redis item in List or Get Operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<RedisResourceInner>, RedisResourceInner> beginUpdate(
+        String resourceGroupName, String name, RedisUpdateParameters parameters);
+
+    /**
+     * Update an existing Redis cache.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @param parameters Parameters supplied to the Update Redis operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of a single Redis item in List or Get Operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<RedisResourceInner>, RedisResourceInner> beginUpdate(
+        String resourceGroupName, String name, RedisUpdateParameters parameters, Context context);
 
     /**
      * Update an existing Redis cache.
@@ -291,11 +337,10 @@ public interface RedisClient
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single Redis item in List or Get Operation along with {@link Response}.
+     * @return a single Redis item in List or Get Operation.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<RedisResourceInner> updateWithResponse(
-        String resourceGroupName, String name, RedisUpdateParameters parameters, Context context);
+    RedisResourceInner update(String resourceGroupName, String name, RedisUpdateParameters parameters, Context context);
 
     /**
      * Deletes a Redis cache.

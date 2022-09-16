@@ -18,8 +18,8 @@ public final class CheckNameAvailabilityParameters {
     private String name;
 
     /*
-     * Resource type. The only legal value of this property for checking redis
-     * cache name availability is 'Microsoft.Cache/redis'.
+     * Resource type. The only legal value of this property for checking redis cache name availability is
+     * 'Microsoft.Cache/redis'.
      */
     @JsonProperty(value = "type", required = true)
     private String type;

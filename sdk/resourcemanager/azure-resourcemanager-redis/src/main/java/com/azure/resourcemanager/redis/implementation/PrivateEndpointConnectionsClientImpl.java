@@ -101,7 +101,7 @@ public final class PrivateEndpointConnectionsClientImpl implements PrivateEndpoi
         @Put(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Cache/redis"
                 + "/{cacheName}/privateEndpointConnections/{privateEndpointConnectionName}")
-        @ExpectedResponses({201})
+        @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> put(
             @HostParam("$host") String endpoint,
@@ -434,14 +434,7 @@ public final class PrivateEndpointConnectionsClientImpl implements PrivateEndpoi
     public Mono<PrivateEndpointConnectionInner> getAsync(
         String resourceGroupName, String cacheName, String privateEndpointConnectionName) {
         return getWithResponseAsync(resourceGroupName, cacheName, privateEndpointConnectionName)
-            .flatMap(
-                (Response<PrivateEndpointConnectionInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -951,7 +944,7 @@ public final class PrivateEndpointConnectionsClientImpl implements PrivateEndpoi
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> deleteAsync(String resourceGroupName, String cacheName, String privateEndpointConnectionName) {
         return deleteWithResponseAsync(resourceGroupName, cacheName, privateEndpointConnectionName)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**

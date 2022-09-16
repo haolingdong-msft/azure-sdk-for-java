@@ -463,14 +463,7 @@ public final class PatchSchedulesClientImpl implements PatchSchedulesClient {
     public Mono<RedisPatchScheduleInner> createOrUpdateAsync(
         String resourceGroupName, String name, DefaultName defaultParameter, RedisPatchScheduleInner parameters) {
         return createOrUpdateWithResponseAsync(resourceGroupName, name, defaultParameter, parameters)
-            .flatMap(
-                (Response<RedisPatchScheduleInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -633,8 +626,7 @@ public final class PatchSchedulesClientImpl implements PatchSchedulesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> deleteAsync(String resourceGroupName, String name, DefaultName defaultParameter) {
-        return deleteWithResponseAsync(resourceGroupName, name, defaultParameter)
-            .flatMap((Response<Void> res) -> Mono.empty());
+        return deleteWithResponseAsync(resourceGroupName, name, defaultParameter).flatMap(ignored -> Mono.empty());
     }
 
     /**
@@ -792,14 +784,7 @@ public final class PatchSchedulesClientImpl implements PatchSchedulesClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<RedisPatchScheduleInner> getAsync(String resourceGroupName, String name, DefaultName defaultParameter) {
         return getWithResponseAsync(resourceGroupName, name, defaultParameter)
-            .flatMap(
-                (Response<RedisPatchScheduleInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -839,7 +824,8 @@ public final class PatchSchedulesClientImpl implements PatchSchedulesClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -876,7 +862,8 @@ public final class PatchSchedulesClientImpl implements PatchSchedulesClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.

@@ -132,8 +132,9 @@ public final class RedisUpdateParameters {
     }
 
     /**
-     * Get the redisVersion property: Redis version. Only major version will be used in PUT/PATCH request with current
-     * valid values: (4, 6).
+     * Get the redisVersion property: Redis version. This should be in the form 'major[.minor]' (only 'major' is
+     * required) or the value 'latest' which refers to the latest stable Redis version that is available. Supported
+     * versions: 4.0, 6.0 (latest). Default value is 'latest'.
      *
      * @return the redisVersion value.
      */
@@ -142,8 +143,9 @@ public final class RedisUpdateParameters {
     }
 
     /**
-     * Set the redisVersion property: Redis version. Only major version will be used in PUT/PATCH request with current
-     * valid values: (4, 6).
+     * Set the redisVersion property: Redis version. This should be in the form 'major[.minor]' (only 'major' is
+     * required) or the value 'latest' which refers to the latest stable Redis version that is available. Supported
+     * versions: 4.0, 6.0 (latest). Default value is 'latest'.
      *
      * @param redisVersion the redisVersion value to set.
      * @return the RedisUpdateParameters object itself.

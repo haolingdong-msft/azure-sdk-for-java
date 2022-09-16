@@ -129,9 +129,9 @@ public final class RedisClientImpl
         @Headers({"Content-Type: application/json"})
         @Patch(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Cache/redis/{name}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<RedisResourceInner>> update(
+        Mono<Response<Flux<ByteBuffer>>> update(
             @HostParam("$host") String endpoint,
             @PathParam("resourceGroupName") String resourceGroupName,
             @PathParam("name") String name,
@@ -401,7 +401,7 @@ public final class RedisClientImpl
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> checkNameAvailabilityAsync(CheckNameAvailabilityParameters parameters) {
-        return checkNameAvailabilityWithResponseAsync(parameters).flatMap((Response<Void> res) -> Mono.empty());
+        return checkNameAvailabilityWithResponseAsync(parameters).flatMap(ignored -> Mono.empty());
     }
 
     /**
@@ -906,7 +906,7 @@ public final class RedisClientImpl
      *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<RedisResourceInner>> updateWithResponseAsync(
+    public Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
         String resourceGroupName, String name, RedisUpdateParameters parameters) {
         if (this.client.getEndpoint() == null) {
             return Mono
@@ -963,7 +963,7 @@ public final class RedisClientImpl
      *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<RedisResourceInner>> updateWithResponseAsync(
+    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
         String resourceGroupName, String name, RedisUpdateParameters parameters, Context context) {
         if (this.client.getEndpoint() == null) {
             return Mono
@@ -1012,20 +1012,117 @@ public final class RedisClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of a single Redis item in List or Get Operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public PollerFlux<PollResult<RedisResourceInner>, RedisResourceInner> beginUpdateAsync(
+        String resourceGroupName, String name, RedisUpdateParameters parameters) {
+        Mono<Response<Flux<ByteBuffer>>> mono = updateWithResponseAsync(resourceGroupName, name, parameters);
+        return this
+            .client
+            .<RedisResourceInner, RedisResourceInner>getLroResult(
+                mono,
+                this.client.getHttpPipeline(),
+                RedisResourceInner.class,
+                RedisResourceInner.class,
+                this.client.getContext());
+    }
+
+    /**
+     * Update an existing Redis cache.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @param parameters Parameters supplied to the Update Redis operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of a single Redis item in List or Get Operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<RedisResourceInner>, RedisResourceInner> beginUpdateAsync(
+        String resourceGroupName, String name, RedisUpdateParameters parameters, Context context) {
+        context = this.client.mergeContext(context);
+        Mono<Response<Flux<ByteBuffer>>> mono = updateWithResponseAsync(resourceGroupName, name, parameters, context);
+        return this
+            .client
+            .<RedisResourceInner, RedisResourceInner>getLroResult(
+                mono, this.client.getHttpPipeline(), RedisResourceInner.class, RedisResourceInner.class, context);
+    }
+
+    /**
+     * Update an existing Redis cache.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @param parameters Parameters supplied to the Update Redis operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of a single Redis item in List or Get Operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<RedisResourceInner>, RedisResourceInner> beginUpdate(
+        String resourceGroupName, String name, RedisUpdateParameters parameters) {
+        return beginUpdateAsync(resourceGroupName, name, parameters).getSyncPoller();
+    }
+
+    /**
+     * Update an existing Redis cache.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @param parameters Parameters supplied to the Update Redis operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of a single Redis item in List or Get Operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<RedisResourceInner>, RedisResourceInner> beginUpdate(
+        String resourceGroupName, String name, RedisUpdateParameters parameters, Context context) {
+        return beginUpdateAsync(resourceGroupName, name, parameters, context).getSyncPoller();
+    }
+
+    /**
+     * Update an existing Redis cache.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @param parameters Parameters supplied to the Update Redis operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a single Redis item in List or Get Operation on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<RedisResourceInner> updateAsync(
         String resourceGroupName, String name, RedisUpdateParameters parameters) {
-        return updateWithResponseAsync(resourceGroupName, name, parameters)
-            .flatMap(
-                (Response<RedisResourceInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+        return beginUpdateAsync(resourceGroupName, name, parameters)
+            .last()
+            .flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Update an existing Redis cache.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @param parameters Parameters supplied to the Update Redis operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a single Redis item in List or Get Operation on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<RedisResourceInner> updateAsync(
+        String resourceGroupName, String name, RedisUpdateParameters parameters, Context context) {
+        return beginUpdateAsync(resourceGroupName, name, parameters, context)
+            .last()
+            .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
@@ -1054,12 +1151,12 @@ public final class RedisClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single Redis item in List or Get Operation along with {@link Response}.
+     * @return a single Redis item in List or Get Operation.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<RedisResourceInner> updateWithResponse(
+    public RedisResourceInner update(
         String resourceGroupName, String name, RedisUpdateParameters parameters, Context context) {
-        return updateWithResponseAsync(resourceGroupName, name, parameters, context).block();
+        return updateAsync(resourceGroupName, name, parameters, context).block();
     }
 
     /**
@@ -1395,14 +1492,7 @@ public final class RedisClientImpl
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<RedisResourceInner> getByResourceGroupAsync(String resourceGroupName, String name) {
         return getByResourceGroupWithResponseAsync(resourceGroupName, name)
-            .flatMap(
-                (Response<RedisResourceInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -1850,15 +1940,7 @@ public final class RedisClientImpl
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<RedisAccessKeysInner> listKeysAsync(String resourceGroupName, String name) {
-        return listKeysWithResponseAsync(resourceGroupName, name)
-            .flatMap(
-                (Response<RedisAccessKeysInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+        return listKeysWithResponseAsync(resourceGroupName, name).flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -2015,14 +2097,7 @@ public final class RedisClientImpl
     public Mono<RedisAccessKeysInner> regenerateKeyAsync(
         String resourceGroupName, String name, RedisRegenerateKeyParameters parameters) {
         return regenerateKeyWithResponseAsync(resourceGroupName, name, parameters)
-            .flatMap(
-                (Response<RedisAccessKeysInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -2188,14 +2263,7 @@ public final class RedisClientImpl
     public Mono<RedisForceRebootResponseInner> forceRebootAsync(
         String resourceGroupName, String name, RedisRebootParameters parameters) {
         return forceRebootWithResponseAsync(resourceGroupName, name, parameters)
-            .flatMap(
-                (Response<RedisForceRebootResponseInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -2750,7 +2818,8 @@ public final class RedisClientImpl
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -2787,7 +2856,8 @@ public final class RedisClientImpl
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -2825,7 +2895,8 @@ public final class RedisClientImpl
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -2862,7 +2933,8 @@ public final class RedisClientImpl
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -2900,7 +2972,8 @@ public final class RedisClientImpl
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -2937,7 +3010,8 @@ public final class RedisClientImpl
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
