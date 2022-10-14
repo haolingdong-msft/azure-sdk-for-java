@@ -69,7 +69,7 @@ add the direct dependency to your project as follows.
 <dependency>
     <groupId>com.azure</groupId>
     <artifactId>azure-messaging-servicebus</artifactId>
-    <version>7.10.1</version>
+    <version>7.11.0</version>
 </dependency>
 ```
 [//]: # ({x-version-update-end})
@@ -401,7 +401,7 @@ Guidelines](https://github.com/Azure/azure-sdk-for-java/blob/main/CONTRIBUTING.m
 [deadletterqueue_docs]: https://docs.microsoft.com/azure/service-bus-messaging/service-bus-dead-letter-queues
 [java_development_kit]: https://docs.microsoft.com/java/azure/jdk/?view=azure-java-stable
 [java_8_sdk_javadocs]: https://docs.oracle.com/javase/8/docs/api/java/util/logging/package-summary.html
-[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-with-Azure-SDK
+[logging]: https://docs.microsoft.com/azure/developer/java/sdk/logging-overview
 [maven]: https://maven.apache.org/
 [maven_package]: https://search.maven.org/artifact/com.azure/azure-messaging-servicebus
 [message-sessions]: https://docs.microsoft.com/azure/service-bus-messaging/message-sessions
