@@ -22,6 +22,10 @@ public final class RedisAccessKeysInner {
     @JsonProperty(value = "secondaryKey", access = JsonProperty.Access.WRITE_ONLY)
     private String secondaryKey;
 
+    /** Creates an instance of RedisAccessKeysInner class. */
+    public RedisAccessKeysInner() {
+    }
+
     /**
      * Get the primaryKey property: The current primary key that clients can use to authenticate with Redis cache.
      *

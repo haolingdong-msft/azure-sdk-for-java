@@ -26,7 +26,7 @@ public final class RedisConfiguration {
     private String rdbBackupEnabled;
 
     /*
-     * Specifies the frequency for creating rdb backup
+     * Specifies the frequency for creating rdb backup in minutes. Valid values: (15, 30, 60, 360, 720, 1440)
      */
     @JsonProperty(value = "rdb-backup-frequency")
     private String rdbBackupFrequency;
@@ -125,6 +125,10 @@ public final class RedisConfiguration {
      */
     @JsonIgnore private Map<String, String> additionalProperties;
 
+    /** Creates an instance of RedisConfiguration class. */
+    public RedisConfiguration() {
+    }
+
     /**
      * Get the rdbBackupEnabled property: Specifies whether the rdb backup is enabled.
      *
@@ -146,7 +150,8 @@ public final class RedisConfiguration {
     }
 
     /**
-     * Get the rdbBackupFrequency property: Specifies the frequency for creating rdb backup.
+     * Get the rdbBackupFrequency property: Specifies the frequency for creating rdb backup in minutes. Valid values:
+     * (15, 30, 60, 360, 720, 1440).
      *
      * @return the rdbBackupFrequency value.
      */
@@ -155,7 +160,8 @@ public final class RedisConfiguration {
     }
 
     /**
-     * Set the rdbBackupFrequency property: Specifies the frequency for creating rdb backup.
+     * Set the rdbBackupFrequency property: Specifies the frequency for creating rdb backup in minutes. Valid values:
+     * (15, 30, 60, 360, 720, 1440).
      *
      * @param rdbBackupFrequency the rdbBackupFrequency value to set.
      * @return the RedisConfiguration object itself.

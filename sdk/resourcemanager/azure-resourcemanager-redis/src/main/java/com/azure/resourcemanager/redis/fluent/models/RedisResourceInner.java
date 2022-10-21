@@ -40,6 +40,10 @@ public final class RedisResourceInner extends Resource {
     @JsonProperty(value = "identity")
     private ManagedServiceIdentity identity;
 
+    /** Creates an instance of RedisResourceInner class. */
+    public RedisResourceInner() {
+    }
+
     /**
      * Get the innerProperties property: Redis cache properties.
      *

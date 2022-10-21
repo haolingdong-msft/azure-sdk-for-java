@@ -179,21 +179,6 @@ public final class AsyncOperationStatusClientImpl implements AsyncOperationStatu
      *
      * @param location The location at which operation was triggered.
      * @param operationId The ID of asynchronous operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return asynchronous operation status.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public OperationStatusInner get(String location, String operationId) {
-        return getAsync(location, operationId).block();
-    }
-
-    /**
-     * For checking the ongoing status of an operation.
-     *
-     * @param location The location at which operation was triggered.
-     * @param operationId The ID of asynchronous operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -203,5 +188,20 @@ public final class AsyncOperationStatusClientImpl implements AsyncOperationStatu
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<OperationStatusInner> getWithResponse(String location, String operationId, Context context) {
         return getWithResponseAsync(location, operationId, context).block();
+    }
+
+    /**
+     * For checking the ongoing status of an operation.
+     *
+     * @param location The location at which operation was triggered.
+     * @param operationId The ID of asynchronous operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return asynchronous operation status.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public OperationStatusInner get(String location, String operationId) {
+        return getWithResponse(location, operationId, Context.NONE).getValue();
     }
 }

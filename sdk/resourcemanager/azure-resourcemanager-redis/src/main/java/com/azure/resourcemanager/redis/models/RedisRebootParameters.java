@@ -29,6 +29,10 @@ public final class RedisRebootParameters {
     @JsonProperty(value = "ports")
     private List<Integer> ports;
 
+    /** Creates an instance of RedisRebootParameters class. */
+    public RedisRebootParameters() {
+    }
+
     /**
      * Get the rebootType property: Which Redis node(s) to reboot. Depending on this value data loss is possible.
      *

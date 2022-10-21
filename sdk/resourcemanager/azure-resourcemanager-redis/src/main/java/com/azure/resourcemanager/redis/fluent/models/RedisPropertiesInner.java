@@ -67,6 +67,10 @@ public final class RedisPropertiesInner extends RedisCreateProperties {
     @JsonProperty(value = "privateEndpointConnections", access = JsonProperty.Access.WRITE_ONLY)
     private List<PrivateEndpointConnectionInner> privateEndpointConnections;
 
+    /** Creates an instance of RedisPropertiesInner class. */
+    public RedisPropertiesInner() {
+    }
+
     /**
      * Get the provisioningState property: Redis instance provisioning status.
      *

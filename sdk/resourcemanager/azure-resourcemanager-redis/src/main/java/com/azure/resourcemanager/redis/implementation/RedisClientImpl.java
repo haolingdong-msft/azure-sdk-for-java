@@ -409,20 +409,6 @@ public final class RedisClientImpl
      *
      * @param parameters Parameters supplied to the CheckNameAvailability Redis operation. The only supported resource
      *     type is 'Microsoft.Cache/redis'.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void checkNameAvailability(CheckNameAvailabilityParameters parameters) {
-        checkNameAvailabilityAsync(parameters).block();
-    }
-
-    /**
-     * Checks that the redis cache name is valid and is not already in use.
-     *
-     * @param parameters Parameters supplied to the CheckNameAvailability Redis operation. The only supported resource
-     *     type is 'Microsoft.Cache/redis'.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -433,6 +419,20 @@ public final class RedisClientImpl
     public Response<Void> checkNameAvailabilityWithResponse(
         CheckNameAvailabilityParameters parameters, Context context) {
         return checkNameAvailabilityWithResponseAsync(parameters, context).block();
+    }
+
+    /**
+     * Checks that the redis cache name is valid and is not already in use.
+     *
+     * @param parameters Parameters supplied to the CheckNameAvailability Redis operation. The only supported resource
+     *     type is 'Microsoft.Cache/redis'.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void checkNameAvailability(CheckNameAvailabilityParameters parameters) {
+        checkNameAvailabilityWithResponse(parameters, Context.NONE);
     }
 
     /**
@@ -1500,21 +1500,6 @@ public final class RedisClientImpl
      *
      * @param resourceGroupName The name of the resource group.
      * @param name The name of the Redis cache.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Redis cache (resource description).
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public RedisResourceInner getByResourceGroup(String resourceGroupName, String name) {
-        return getByResourceGroupAsync(resourceGroupName, name).block();
-    }
-
-    /**
-     * Gets a Redis cache (resource description).
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param name The name of the Redis cache.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -1525,6 +1510,21 @@ public final class RedisClientImpl
     public Response<RedisResourceInner> getByResourceGroupWithResponse(
         String resourceGroupName, String name, Context context) {
         return getByResourceGroupWithResponseAsync(resourceGroupName, name, context).block();
+    }
+
+    /**
+     * Gets a Redis cache (resource description).
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Redis cache (resource description).
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public RedisResourceInner getByResourceGroup(String resourceGroupName, String name) {
+        return getByResourceGroupWithResponse(resourceGroupName, name, Context.NONE).getValue();
     }
 
     /**
@@ -1948,21 +1948,6 @@ public final class RedisClientImpl
      *
      * @param resourceGroupName The name of the resource group.
      * @param name The name of the Redis cache.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return redis cache access keys.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public RedisAccessKeysInner listKeys(String resourceGroupName, String name) {
-        return listKeysAsync(resourceGroupName, name).block();
-    }
-
-    /**
-     * Retrieve a Redis cache's access keys. This operation requires write permission to the cache resource.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param name The name of the Redis cache.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -1972,6 +1957,21 @@ public final class RedisClientImpl
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<RedisAccessKeysInner> listKeysWithResponse(String resourceGroupName, String name, Context context) {
         return listKeysWithResponseAsync(resourceGroupName, name, context).block();
+    }
+
+    /**
+     * Retrieve a Redis cache's access keys. This operation requires write permission to the cache resource.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return redis cache access keys.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public RedisAccessKeysInner listKeys(String resourceGroupName, String name) {
+        return listKeysWithResponse(resourceGroupName, name, Context.NONE).getValue();
     }
 
     /**
@@ -2106,23 +2106,6 @@ public final class RedisClientImpl
      * @param resourceGroupName The name of the resource group.
      * @param name The name of the Redis cache.
      * @param parameters Specifies which key to regenerate.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return redis cache access keys.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public RedisAccessKeysInner regenerateKey(
-        String resourceGroupName, String name, RedisRegenerateKeyParameters parameters) {
-        return regenerateKeyAsync(resourceGroupName, name, parameters).block();
-    }
-
-    /**
-     * Regenerate Redis cache's access keys. This operation requires write permission to the cache resource.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param name The name of the Redis cache.
-     * @param parameters Specifies which key to regenerate.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -2133,6 +2116,23 @@ public final class RedisClientImpl
     public Response<RedisAccessKeysInner> regenerateKeyWithResponse(
         String resourceGroupName, String name, RedisRegenerateKeyParameters parameters, Context context) {
         return regenerateKeyWithResponseAsync(resourceGroupName, name, parameters, context).block();
+    }
+
+    /**
+     * Regenerate Redis cache's access keys. This operation requires write permission to the cache resource.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @param parameters Specifies which key to regenerate.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return redis cache access keys.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public RedisAccessKeysInner regenerateKey(
+        String resourceGroupName, String name, RedisRegenerateKeyParameters parameters) {
+        return regenerateKeyWithResponse(resourceGroupName, name, parameters, Context.NONE).getValue();
     }
 
     /**
@@ -2273,24 +2273,6 @@ public final class RedisClientImpl
      * @param resourceGroupName The name of the resource group.
      * @param name The name of the Redis cache.
      * @param parameters Specifies which Redis node(s) to reboot.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response to force reboot for Redis cache.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public RedisForceRebootResponseInner forceReboot(
-        String resourceGroupName, String name, RedisRebootParameters parameters) {
-        return forceRebootAsync(resourceGroupName, name, parameters).block();
-    }
-
-    /**
-     * Reboot specified Redis node(s). This operation requires write permission to the cache resource. There can be
-     * potential data loss.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param name The name of the Redis cache.
-     * @param parameters Specifies which Redis node(s) to reboot.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -2301,6 +2283,24 @@ public final class RedisClientImpl
     public Response<RedisForceRebootResponseInner> forceRebootWithResponse(
         String resourceGroupName, String name, RedisRebootParameters parameters, Context context) {
         return forceRebootWithResponseAsync(resourceGroupName, name, parameters, context).block();
+    }
+
+    /**
+     * Reboot specified Redis node(s). This operation requires write permission to the cache resource. There can be
+     * potential data loss.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the Redis cache.
+     * @param parameters Specifies which Redis node(s) to reboot.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return response to force reboot for Redis cache.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public RedisForceRebootResponseInner forceReboot(
+        String resourceGroupName, String name, RedisRebootParameters parameters) {
+        return forceRebootWithResponse(resourceGroupName, name, parameters, Context.NONE).getValue();
     }
 
     /**

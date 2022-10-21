@@ -258,7 +258,7 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
             redisManager
                 .redisCaches()
                 .define(rrNameThird)
-                .withRegion(Region.US_CENTRAL)
+                .withRegion("centraluseuap")
                 .withNewResourceGroup(rgNameSecond)
                 .withPremiumSku(2)
                 .withPatchSchedule(DayOfWeek.SATURDAY, 5, Duration.ofHours(5))
@@ -340,6 +340,11 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
 
         redisManager.redisCaches().deleteById(redisCache.id());
 
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         // AOF
         redisCache =
             redisManager

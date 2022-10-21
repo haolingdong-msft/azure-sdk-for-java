@@ -31,6 +31,10 @@ public final class ImportRdbParameters {
     @JsonProperty(value = "preferred-data-archive-auth-method")
     private String preferredDataArchiveAuthMethod;
 
+    /** Creates an instance of ImportRdbParameters class. */
+    public ImportRdbParameters() {
+    }
+
     /**
      * Get the format property: File format.
      *

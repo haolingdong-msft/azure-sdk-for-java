@@ -46,6 +46,10 @@ public final class RedisCreateParameters {
     @JsonProperty(value = "identity")
     private ManagedServiceIdentity identity;
 
+    /** Creates an instance of RedisCreateParameters class. */
+    public RedisCreateParameters() {
+    }
+
     /**
      * Get the innerProperties property: Redis cache properties.
      *

@@ -30,6 +30,10 @@ public final class Sku {
     @JsonProperty(value = "capacity", required = true)
     private int capacity;
 
+    /** Creates an instance of Sku class. */
+    public Sku() {
+    }
+
     /**
      * Get the name property: The type of Redis cache to deploy. Valid values: (Basic, Standard, Premium).
      *

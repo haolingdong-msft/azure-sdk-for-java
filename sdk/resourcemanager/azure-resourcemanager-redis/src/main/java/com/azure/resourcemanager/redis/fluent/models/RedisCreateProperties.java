@@ -37,6 +37,10 @@ public class RedisCreateProperties extends RedisCommonProperties {
     @JsonProperty(value = "staticIP")
     private String staticIp;
 
+    /** Creates an instance of RedisCreateProperties class. */
+    public RedisCreateProperties() {
+    }
+
     /**
      * Get the sku property: The SKU of the Redis cache to deploy.
      *

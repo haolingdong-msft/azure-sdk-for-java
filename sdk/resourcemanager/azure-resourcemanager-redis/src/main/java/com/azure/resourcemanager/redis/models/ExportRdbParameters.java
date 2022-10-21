@@ -36,6 +36,10 @@ public final class ExportRdbParameters {
     @JsonProperty(value = "preferred-data-archive-auth-method")
     private String preferredDataArchiveAuthMethod;
 
+    /** Creates an instance of ExportRdbParameters class. */
+    public ExportRdbParameters() {
+    }
+
     /**
      * Get the format property: File format.
      *
