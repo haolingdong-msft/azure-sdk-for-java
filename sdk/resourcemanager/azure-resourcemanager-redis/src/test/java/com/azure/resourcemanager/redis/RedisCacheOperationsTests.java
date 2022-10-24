@@ -258,7 +258,7 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
             redisManager
                 .redisCaches()
                 .define(rrNameThird)
-                .withRegion("centraluseuap")
+                .withRegion(Region.US_EAST)
                 .withNewResourceGroup(rgNameSecond)
                 .withPremiumSku(2)
                 .withPatchSchedule(DayOfWeek.SATURDAY, 5, Duration.ofHours(5))
@@ -354,11 +354,12 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
                 .withExistingResourceGroup(rgName)
                 .withPremiumSku()
                 .withMinimumTlsVersion(TlsVersion.ONE_TWO)
-                .withRedisConfiguration("aof-backup-enabled", "true")
-                .withRedisConfiguration("aof-storage-connection-string-0", connectionString)
-                .withRedisConfiguration("aof-storage-connection-string-1", connectionString)
+                .withRedisConfiguration(new RedisConfiguration()
+                    .withAofBackupEnabled("true")
+                    .withAofStorageConnectionString0(connectionString)
+                    .withAofStorageConnectionString1(connectionString))
                 .create();
-        Assertions.assertEquals("true", redisCache.innerModel().redisConfiguration().additionalProperties().get("aof-backup-enabled"));
+        Assertions.assertEquals("true", redisCache.innerModel().redisConfiguration().aofBackupEnabled());
         Assertions.assertNotNull(redisCache.innerModel().redisConfiguration().aofStorageConnectionString0());
         Assertions.assertNotNull(redisCache.innerModel().redisConfiguration().aofStorageConnectionString1());
 
