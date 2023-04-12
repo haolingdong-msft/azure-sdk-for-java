@@ -5,10 +5,13 @@ package com.azure.resourcemanager.confidentialledger;
 
 import com.azure.core.credential.AccessToken;
 import com.azure.core.credential.TokenCredential;
+import com.azure.core.http.policy.HttpLogDetailLevel;
+import com.azure.core.http.policy.HttpLogOptions;
 import com.azure.core.management.AzureEnvironment;
 import com.azure.core.management.profile.AzureProfile;
 import com.azure.core.test.TestBase;
 import com.azure.core.test.TestMode;
+import com.azure.core.test.TestProxyTestBase;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 
 import com.azure.resourcemanager.resources.ResourceManager;
@@ -26,7 +29,7 @@ import java.util.Map;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ConfidentialLedgerManagementTestBase extends TestBase {
+public class ConfidentialLedgerManagementTestBase extends TestProxyTestBase {
     private static AzureProfile azureProfile;
     private static TokenCredential credential;
     private static ResourceGroup testResourceGroup;
@@ -38,7 +41,7 @@ public class ConfidentialLedgerManagementTestBase extends TestBase {
         setCredential();
 
         // Create a resource group for testing in LIVE and RECORD modes only
-        String testResourceGroupName = "acl-sdk-test-rg";
+        String testResourceGroupName = "acl-sdk-test-rg" + OffsetDateTime.now().toEpochSecond();
         setTestResourceGroup(testResourceGroupName);
     }
     @AfterAll
@@ -65,6 +68,7 @@ public class ConfidentialLedgerManagementTestBase extends TestBase {
             ledgerManager = ConfidentialLedgerManager
                 .configure()
                 .withPolicy(interceptorManager.getRecordPolicy())
+                .withLogOptions(new HttpLogOptions().setLogLevel(HttpLogDetailLevel.BODY_AND_HEADERS))
                 .authenticate(getCredential(), getAzureProfile());
         } else if (getTestMode() == TestMode.PLAYBACK) {
             ledgerManager = ConfidentialLedgerManager
