@@ -17,6 +17,7 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.resourcemanager.resources.ResourceManager;
 import com.azure.resourcemanager.resources.models.ResourceGroup;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import reactor.core.publisher.Mono;
@@ -36,6 +37,9 @@ public class ConfidentialLedgerManagementTestBase extends TestProxyTestBase {
     private ConfidentialLedgerManagementOperations ledgerOperationsInstance;
     @BeforeAll
     public static void setup() {
+        // set up test proxy explicitly as it will be overridden in this subclass.
+        TestProxyTestBase.setup();
+
         // Authenticate
         setAzureProfile();
         setCredential();
