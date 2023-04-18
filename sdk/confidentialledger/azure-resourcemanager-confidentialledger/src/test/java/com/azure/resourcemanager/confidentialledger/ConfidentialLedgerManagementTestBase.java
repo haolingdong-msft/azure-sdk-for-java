@@ -37,9 +37,6 @@ public class ConfidentialLedgerManagementTestBase extends TestProxyTestBase {
     private ConfidentialLedgerManagementOperations ledgerOperationsInstance;
     @BeforeAll
     public static void setup() {
-        // set up test proxy explicitly as it will be overridden in this subclass.
-        TestProxyTestBase.setup();
-
         // Authenticate
         setAzureProfile();
         setCredential();
